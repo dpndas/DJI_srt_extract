@@ -1,24 +1,39 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-
 
 #Author : Dipin
 #Function : Analyse the annotation file to produce text, csv,and graphs
-
-
 import os
 import pandas as pd
 import math
 import matplotlib.pyplot as plt
+import sys
+
+def check_files_exist(file_name):
+  
+    if not os.path.exists(file_name):
+        print(f" Input Error: The following files do not exist:  {file_name} ")
+        sys.exit(1)
+    else:
+        print(f"Found file going ahead : {file_name} ")
 
 def main():
+
+    # Get input from the user about the file name 
+    # HMN : Typically one can also use argparse where a help function helps users to know what is the input etc. 
+
     csv_file_path = input("Enter the file path for the annotation file: ")
+    check_files_exist (csv_file_path)
+
+    # HMN : What is this going to do? A broad level information is fine.  
     df, unique_frames_count, total_individuals, unique_individuals, csv_file_name, input_directory = process_csv(csv_file_path)
+    
+    # HMN : Why not have one function that is only
+    # HMN : Whay does every function return a df? Does it actually modify if with every call?   
+
     df, frames_with_classid_error, box_classid_error, classid_error_statements = class_error(df)
     df, frames_with_duplicates, duplicate_statements = duplicates(df)
     df, sentences_iou, row_with_iou_0 = iou(df)
     total_individuals_area,  unique_individuals_area, frames_unique_entries_area, statements_area = area_analysis(df)
+    
     filtered_disappearance_statements = disappearing_boxes(df, frames_with_classid_error, frames_with_duplicates)
     plot1(df, input_directory, csv_file_name)
     create_individual_plots(df, unique_individuals_area, total_individuals_area, input_directory, csv_file_name)
@@ -87,7 +102,7 @@ def class_error(df_in):
         df_in: data frame of the annotation
         
     Return:
-        df_in: Updated data frame
+        df_in: Updated data frame 
         frames_with_classid_error: Frames that has class error
         box_classid_error: boundind boxes with class error
         classid_error_statements : Statement to be printed in the txt file
