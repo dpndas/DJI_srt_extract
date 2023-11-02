@@ -38,6 +38,7 @@ def main():
     plot1(df, input_directory, csv_file_name)
     create_individual_plots(df, unique_individuals_area, total_individuals_area, input_directory, csv_file_name)
     csv_file_path = save_dataframe_to_csv(df, csv_file_path)
+    
     text_save(
         input_directory,
         csv_file_name,
@@ -97,6 +98,7 @@ def process_csv(file_path):
 def class_error(df_in):
     """
     Identifies the classid error and creates column in the csv
+    # The function seems to be doing a lot more 
     
     Args:
         df_in: data frame of the annotation
@@ -113,6 +115,7 @@ def class_error(df_in):
     df_in['classid_error'] = 0
 
     # Function to update 'classid_error' column based on 'classid' column
+    # A small function that checks class id is -1 then corresponding entry for classid_error is -1 
     def update_classid_error(row):
         if row['classid'] == -1:
             return 1
@@ -124,7 +127,7 @@ def class_error(df_in):
 
     df_in['classid_error_frame'] = 0
 
-    # Find frames with 'classid_error' entry of 1
+    # Find frames with 'classid_error' entry of 1 : HMN does not make any sense
     frames_with_classid_error = df_in[df_in['classid_error'] == 1]['frame'].unique()
 
     # Update 'classid_error_frame' column for the identified frames
@@ -135,6 +138,7 @@ def class_error(df_in):
     # Print frames with classid errors
     print("Frames with classid errors:", frames_with_classid_error)
 
+    # HMN : What is this part of the code supposed to do? 
     classid_error_statements = []
     for frame in frames_with_classid_error:
 
@@ -149,9 +153,6 @@ def class_error(df_in):
     print("classid_error_statements:", classid_error_statements)
 
     return df_in, frames_with_classid_error, box_classid_error, classid_error_statements 
-
-
-
 
     #Finding duplicate frames
 def duplicates(df_in):
