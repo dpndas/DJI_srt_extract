@@ -122,6 +122,10 @@ class DataProcessor:
     
 
     def duplicates(self):
+        """
+        Cleans the duplicates error by comparing the bounding boxes with the one in the previous frame.
+        """
+        
         # Create a new column 'duplicates' indicating if a row is a duplicate
         self.df['duplicates'] = self.df.groupby(['frame', 'classid'])['id'].transform(lambda x: x.duplicated(keep=False).astype(int))
 
@@ -238,10 +242,10 @@ class DataProcessor:
             self.filepath()  # Prompt for the file path interactively if not provided as an argument
 
         if self.checkfile():
-            self.processcsv()
-            self.classerror()
-            self.duplicates()
-            self.savetocsv()
+            self.processcsv()#converts the csv to data frame
+            self.classerror()#solves the class id error
+            self.duplicates()#solves the duplicates error
+            self.savetocsv()#saves the data frame to csv
         else:
             print("Invalid file path or file does not exist.")
 
